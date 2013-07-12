@@ -130,7 +130,12 @@ public abstract class BaseShell<T extends ShellContext> {
      * @return
      */
     protected List<String> parse(final String line) {
-        return new ArrayList<String>(Arrays.asList(line.trim().split("(\\s)+")));
+        List<String> asList = Arrays.asList(line.trim().replaceAll("\\\\ ", "%SPACE%").split("(\\s)+"));
+        for (int i = 0; i < asList.size(); i++) {
+            String string = asList.get(i);
+            asList.set(i, string.replaceAll("%SPACE%", " "));
+        }
+        return new ArrayList<String>(asList);
     }
 
     protected void initHome() throws IOException {
