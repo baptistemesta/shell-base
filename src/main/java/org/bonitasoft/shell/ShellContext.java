@@ -4,11 +4,19 @@
  * BSD license in the documentation provided with this software.
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package org.bonitasoft.engine;
+package org.bonitasoft.shell;
 
 /**
  * @author Baptiste Mesta
  */
 public interface ShellContext {
+
+    boolean isLogged();
+
+    void logout() throws Exception;
+
+    void login(String username, String password) throws Exception;
+
+    Object getApi(String apiName) throws Exception;
 
 }

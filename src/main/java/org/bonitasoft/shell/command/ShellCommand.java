@@ -4,7 +4,7 @@
  * BSD license in the documentation provided with this software.
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package org.bonitasoft.engine.command;
+package org.bonitasoft.shell.command;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import jline.console.completer.Completer;
 
-import org.bonitasoft.engine.ShellContext;
+import org.bonitasoft.shell.ShellContext;
 
 /**
  * A command that can be contributed to a shell

@@ -4,7 +4,7 @@
  * BSD license in the documentation provided with this software.
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package org.bonitasoft.engine.completer;
+package org.bonitasoft.shell.completer;
 
 import static jline.internal.Preconditions.checkNotNull;
 
@@ -14,8 +14,8 @@ import java.util.List;
 import jline.console.completer.Completer;
 import jline.console.completer.StringsCompleter;
 
-import org.bonitasoft.engine.ShellContext;
-import org.bonitasoft.engine.command.ShellCommand;
+import org.bonitasoft.shell.ShellContext;
+import org.bonitasoft.shell.command.ShellCommand;
 
 /**
  * Allow to complete a set of given commands
@@ -39,6 +39,7 @@ public class CommandArgumentsCompleter<T extends ShellContext> implements Comple
         commandCompleter = new StringsCompleter(commands.keySet());
     }
 
+    @Override
     public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
         checkNotNull(candidates);
         final int pos = commandCompleter.complete(buffer, cursor, candidates);
@@ -57,7 +58,13 @@ public class CommandArgumentsCompleter<T extends ShellContext> implements Comple
                     if (completers.size() > lastArgumentIndex) {
                         final Completer completer = completers.get(lastArgumentIndex);
                         final String lastArgument = argumentParser.getLastArgument();
-                        final int complete = completer.complete(lastArgument, lastArgument != null ? lastArgument.length() : 0, candidates);
+                        String previousArgument = argumentParser.getPreviousArgument();
+                        final int complete;
+                        if (lastArgument == null || lastArgument.isEmpty() && previousArgument != null) {
+                            complete = completer.complete(previousArgument, 0, candidates);
+                        } else {
+                            complete = completer.complete(lastArgument, lastArgument != null ? lastArgument.length() : 0, candidates);
+                        }
                         return complete + argumentParser.getOffset();
                     }
                 }

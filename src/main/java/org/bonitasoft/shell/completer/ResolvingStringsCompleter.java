@@ -4,7 +4,7 @@
  * BSD license in the documentation provided with this software.
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package org.bonitasoft.engine.completer;
+package org.bonitasoft.shell.completer;
 
 import java.util.List;
 

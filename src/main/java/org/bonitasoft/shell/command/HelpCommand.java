@@ -4,7 +4,7 @@
  * BSD license in the documentation provided with this software.
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package org.bonitasoft.engine.command;
+package org.bonitasoft.shell.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import java.util.Set;
 import jline.console.completer.Completer;
 import jline.console.completer.StringsCompleter;
 
-import org.bonitasoft.engine.ShellContext;
+import org.bonitasoft.shell.ShellContext;
 
 /**
  * Default implementation of the help command

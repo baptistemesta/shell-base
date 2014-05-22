@@ -4,7 +4,7 @@
  * BSD license in the documentation provided with this software.
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package org.bonitasoft.engine;
+package org.bonitasoft.shell;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,9 +20,10 @@ import java.util.Properties;
 import jline.console.ConsoleReader;
 
 import org.apache.commons.io.FileUtils;
-import org.bonitasoft.engine.command.HelpCommand;
-import org.bonitasoft.engine.command.ShellCommand;
-import org.bonitasoft.engine.completer.CommandArgumentsCompleter;
+import org.bonitasoft.shell.command.HelpCommand;
+import org.bonitasoft.shell.command.ShellCommand;
+import org.bonitasoft.shell.completer.CommandArgumentsCompleter;
+import org.bonitasoft.shell.completer.ReflectCandidateListCompletionHandler;
 
 /**
  * A basic shell
@@ -89,6 +90,7 @@ public abstract class BaseShell<T extends ShellContext> {
         reader.setBellEnabled(false);
         final CommandArgumentsCompleter<T> commandArgumentsCompleter = new CommandArgumentsCompleter<T>(commands);
 
+        reader.setCompletionHandler(new ReflectCandidateListCompletionHandler());
         reader.addCompleter(commandArgumentsCompleter);
 
         String line;
