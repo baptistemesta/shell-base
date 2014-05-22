@@ -106,7 +106,9 @@ public class ReflectCommand<T extends ShellContext> extends ShellCommand<T> {
             Object parameterClass = clazz.getName();
             String parameter = parameters.get(i);
             Serializable casted;
-            if (Boolean.class.getName().equals(parameterClass) || "bool".equals(parameterClass)) {
+            if (parameter == null) {
+                casted = null;
+            } else if (Boolean.class.getName().equals(parameterClass) || "bool".equals(parameterClass)) {
                 casted = Boolean.parseBoolean(parameter);
             } else if (Long.class.getName().equals(parameterClass) || "long".equals(parameterClass)) {
                 casted = Long.parseLong(parameter);
