@@ -20,6 +20,7 @@ import java.util.Properties;
 import jline.console.ConsoleReader;
 
 import org.apache.commons.io.FileUtils;
+import org.bonitasoft.shell.color.PrintColor;
 import org.bonitasoft.shell.command.HelpCommand;
 import org.bonitasoft.shell.command.ShellCommand;
 import org.bonitasoft.shell.completer.CommandArgumentsCompleter;
@@ -55,6 +56,7 @@ public abstract class BaseShell<T extends ShellContext> {
         if (helpCommand != null) {
             commands.put(helpCommand.getName(), helpCommand);
         }
+        PrintColor.init();
         initHome();
 
     }
@@ -68,8 +70,7 @@ public abstract class BaseShell<T extends ShellContext> {
     }
 
     /**
-     * @return
-     *         list of commands contributed to the shell
+     * @return list of commands contributed to the shell
      * @throws Exception
      */
     protected abstract List<ShellCommand<T>> initShellCommands() throws Exception;
@@ -81,6 +82,7 @@ public abstract class BaseShell<T extends ShellContext> {
      */
     public void destroy() throws Exception {
         cleanHome();
+        PrintColor.clean();
     }
 
     public void run(final InputStream in, final OutputStream out) throws Exception {
@@ -132,9 +134,10 @@ public abstract class BaseShell<T extends ShellContext> {
      * @return
      */
     protected List<String> parse(final String line) {
-        List<String> asList = Arrays.asList(line.trim().replaceAll("\\\\ ", "%SPACE%").split("(\\s)+"));
+        final List<String> asList = Arrays.asList(line.trim()
+                .replaceAll("\\\\ ", "%SPACE%").split("(\\s)+"));
         for (int i = 0; i < asList.size(); i++) {
-            String string = asList.get(i);
+            final String string = asList.get(i);
             asList.set(i, string.replaceAll("%SPACE%", " "));
         }
         return new ArrayList<String>(asList);
@@ -153,14 +156,17 @@ public abstract class BaseShell<T extends ShellContext> {
             file = new File(file, "bonita-client.properties");
             file.createNewFile();
             final Properties properties = new Properties();
-            properties.load(this.getClass().getResourceAsStream("/bonita-client.properties"));
+            properties.load(this.getClass().getResourceAsStream(
+                    "/bonita-client.properties"));
             final String application = System.getProperty("shell.application");
             if (application != null) {
                 properties.put("application.name", application);
             }
             final String host = System.getProperty("shell.host");
             final String port = System.getProperty("shell.port");
-            properties.put("server.url", "http://" + (host != null ? host : "localhost") + ":" + (port != null ? port : "8080"));
+            properties.put("server.url", "http://"
+                    + (host != null ? host : "localhost") + ":"
+                    + (port != null ? port : "8080"));
 
             final FileWriter writer = new FileWriter(file);
             try {
@@ -185,16 +191,15 @@ public abstract class BaseShell<T extends ShellContext> {
 
     protected void printWelcomeMessage() {
         System.out.println("Welcome to Bonita Shell.\n For assistance press TAB or type \"help\" then hit ENTER.");
-        System.out.println("______             _ _        _____ _          _ _ ");
-        System.out.println("| ___ \\           (_) |      /  ___| |        | | |");
-        System.out.println("| |_/ / ___  _ __  _| |_ __ _\\ `--.| |__   ___| | |");
-        System.out.println("| ___ \\/ _ \\| '_ \\| | __/ _` |`--. \\ '_ \\ / _ \\ | |");
-        System.out.println("| |_/ / (_) | | | | | || (_| /\\__/ / | | |  __/ | |");
-        System.out.println("\\____/ \\___/|_| |_|_|\\__\\__,_\\____/|_| |_|\\___|_|_|");
+        PrintColor.printRedBold("______             _ _        _____ _          _ _ ");
+        PrintColor.printRedBold("| ___ \\           (_) |      /  ___| |        | | |");
+        PrintColor.printRedBold("| |_/ / ___  _ __  _| |_ __ _\\ `--.| |__   ___| | |");
+        PrintColor.printRedBold("| ___ \\/ _ \\| '_ \\| | __/ _` |`--. \\ '_ \\ / _ \\ | |");
+        PrintColor.printRedBold("| |_/ / (_) | | | | | || (_| /\\__/ / | | |  __/ | |");
+        PrintColor.printRedBold("\\____/ \\___/|_| |_|_|\\__\\__,_\\____/|_| |_|\\___|_|_|");
         System.out.println("");
         System.out.println("");
         System.out.println("");
         System.out.println("");
     }
-
 }

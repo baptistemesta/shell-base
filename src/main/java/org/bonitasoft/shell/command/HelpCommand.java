@@ -17,6 +17,7 @@ import jline.console.completer.Completer;
 import jline.console.completer.StringsCompleter;
 
 import org.bonitasoft.shell.ShellContext;
+import org.bonitasoft.shell.color.PrintColor;
 
 /**
  * Default implementation of the help command
@@ -63,7 +64,7 @@ public class HelpCommand<T extends ShellContext> extends ShellCommand<T> {
         final ArrayList<String> list = new ArrayList<String>(keySet);
         Collections.sort(list);
         for (final String entry : list) {
-            System.out.println(entry);
+            PrintColor.printGreenBold(entry);
         }
         System.out.println("");
         System.out.println("Use 'help <Command>' for help about a command");
