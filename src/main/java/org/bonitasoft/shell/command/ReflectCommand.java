@@ -29,6 +29,7 @@ import java.util.Map;
 import jline.console.completer.Completer;
 
 import org.bonitasoft.shell.ShellContext;
+import org.bonitasoft.shell.color.PrintColor;
 import org.bonitasoft.shell.completer.ReflectMethodCompleter;
 import org.bonitasoft.shell.completer.ReflectMethodHelpCompleter;
 
@@ -141,7 +142,7 @@ public class ReflectCommand<T extends ShellContext> extends ShellCommand<T> {
 
     @Override
     public void printHelp() {
-        System.out.println(apiName + " <method name> <parameters>");
+        PrintColor.printGreenBold(apiName + " <method name> <parameters>");
 
     }
 
