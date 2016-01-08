@@ -6,20 +6,14 @@
  */
 package org.bonitasoft.shell;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 import jline.console.ConsoleReader;
-
-import org.apache.commons.io.FileUtils;
 import org.bonitasoft.shell.color.PrintColor;
 import org.bonitasoft.shell.command.HelpCommand;
 import org.bonitasoft.shell.command.ShellCommand;
@@ -44,7 +38,6 @@ public abstract class BaseShell<T extends ShellContext> {
 
     private HelpCommand<T> helpCommand;
 
-    private File homeFoler;
 
     public void init() throws Exception {
         final List<ShellCommand<T>> commandList = initShellCommands();
@@ -57,7 +50,6 @@ public abstract class BaseShell<T extends ShellContext> {
             commands.put(helpCommand.getName(), helpCommand);
         }
         PrintColor.init();
-        initHome();
 
     }
 
@@ -81,7 +73,6 @@ public abstract class BaseShell<T extends ShellContext> {
      * @throws Exception
      */
     public void destroy() throws Exception {
-        cleanHome();
         PrintColor.clean();
     }
 
@@ -143,47 +134,6 @@ public abstract class BaseShell<T extends ShellContext> {
         return new ArrayList<String>(asList);
     }
 
-    protected void initHome() throws IOException {
-        homeFoler = null;
-        if (System.getProperty("bonita.home") == null) {
-            homeFoler = new File("home");
-            FileUtils.deleteDirectory(homeFoler);
-            homeFoler.mkdir();
-            File file = new File(homeFoler, "client");
-            file.mkdir();
-            file = new File(file, "conf");
-            file.mkdir();
-            file = new File(file, "bonita-client.properties");
-            file.createNewFile();
-            final Properties properties = new Properties();
-            properties.load(this.getClass().getResourceAsStream(
-                    "/bonita-client.properties"));
-            final String application = System.getProperty("shell.application");
-            if (application != null) {
-                properties.put("application.name", application);
-            }
-            final String host = System.getProperty("shell.host");
-            final String port = System.getProperty("shell.port");
-            properties.put("server.url", "http://"
-                    + (host != null ? host : "localhost") + ":"
-                    + (port != null ? port : "8080"));
-
-            final FileWriter writer = new FileWriter(file);
-            try {
-                properties.store(writer, "Server configuration");
-            } finally {
-                writer.close();
-            }
-            System.out.println("Using server configuration " + properties);
-            System.setProperty("bonita.home", homeFoler.getAbsolutePath());
-        }
-    }
-
-    protected void cleanHome() throws IOException {
-        if (homeFoler != null) {
-            FileUtils.deleteDirectory(homeFoler);
-        }
-    }
 
     protected String getPrompt() {
         return PROMPT;
